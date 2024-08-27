@@ -11,6 +11,7 @@ const divIApi= document.getElementById("divIApi");
 const submitBtn= document.getElementById("submitBtn");
 const Input= document.getElementsByClassName("cInput");
 const divinAreaApi= document.getElementById("divinAreaApi");
+const h2= document.querySelectorAll("h2");
 apiDiv.style.marginLeft="6.5%";
 firstApiWOpen();
 removeCLag();
@@ -227,6 +228,9 @@ ingerdients.addEventListener("click", async function (){
                             }
                             apiDiv.innerHTML= htmlData;
                             reset();
+                            getMeal(h2);
+                            target;
+                            mealClicked(target);
                         }
                     })}
                 );
@@ -269,7 +273,58 @@ contactUs.addEventListener("click" , function(){
     apiDiv.innerHTML= htmlData;
     reset();
 })
-// submitBtn.onclick=
-//     firstApiWOpen()
-//     reset();
+
+function getMeal(e){
+    let target = e.target.textContent;
+    console.log(target);
+}
+function mealClicked(ele){
+    h2.forEach((h2I, index) => {
+      h2I.addEventListener("click" , async(e)=>  {
+          let htmlIsData= "";  
+          console.log(ele);
+          let apiIsFetch = await fetch(
+            `https://www.themealdb.com/api/json/v1/1/search.php?s=${ele}`
+          );
+          let fetchIsData = await apiIsFetch.json();
+          console.log(fetchIsData);
+          htmlIsData = `
+            <div class="col-md-8 text-white">
+              <h2>Instructions</h2>
+              <p>${fetchIsData.meals[0].strInstructions}</p>
+              <h3><span class="fw-bolder">Area : </span>${fetchIsData.meals[0].strArea}</h3>
+              <h3><span class="fw-bolder">Category : </span>${fetchIsData.meals[0].strCategory}</h3>
+              <h3>Recipes :</h3>
+              <ul class="list-unstyled d-flex g-3 flex-wrap">
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure1} ${fetchIsData.meals[0].strIngredient1}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure2} ${fetchIsData.meals[0].strIngredient2}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure3} ${fetchIsData.meals[0].strIngredient3}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure4} ${fetchIsData.meals[0].strIngredient4}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure5} ${fetchIsData.meals[0].strIngredient5}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure6} ${fetchIsData.meals[0].strIngredient6}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure7} ${fetchIsData.meals[0].strIngredient7}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure8} ${fetchIsData.meals[0].strIngredient8}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure9} ${fetchIsData.meals[0].strIngredient9}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure10} ${fetchIsData.meals[0].strIngredient10}</li>
+                <li class="alert alert-info m-2 p-1">${fetchIsData.meals[0].strMeasure11} ${fetchIsData.meals[0].strIngredient11}</li>
+              </ul>
+              
+              <h3>Tags :</h3>
+              <ul class="list-unstyled d-flex g-3 flex-wrap">
+                  <li>${fetchIsData.meals[0].strTags}</li>
+              </ul>
+            
+              <a target="_blank" href="${fetchIsData.meals[0].strSource}" class="btn btn-success">Source</a>
+              <a target="_blank" href="${fetchIsData.meals[0].strYoutube}" class="btn btn-danger">Youtube</a>
+            </div>
+            <div class="col-md-4">
+              <img class="w-100 rounded-3" src="${fetchIsData.meals[0].strMealThumb}" alt="">
+                  <h2>${fetchIsData.meals[0].strMeal}</h2>
+            </div>
+        `;
+          apiDiv.innerHTML= htmlIsData;
+          reset();
+      } 
+    }              
+}
 
